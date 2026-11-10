@@ -1,0 +1,918 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Personal task planner for Chukwu Favour E.">
+
+  <title>My Planner | Chukwu Favour E.</title>
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* PLANNER PAGE */
+
+    .planner-page {
+      --planner-bg: #0d0b0c;
+      --planner-panel: #151113;
+      --planner-card: #100e0f;
+      --planner-border: #393034;
+      --planner-text: #f5eee8;
+      --planner-muted: #b8aeb1;
+      --planner-accent: #a52b49;
+      --planner-accent-light: #e77b91;
+
+      min-height: 100vh;
+      background: var(--planner-bg);
+      color: var(--planner-text);
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .planner-page * {
+      box-sizing: border-box;
+    }
+
+    .planner-page button,
+    .planner-page input {
+      font: inherit;
+    }
+
+    .planner-page a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* NAVIGATION */
+
+    .planner-nav {
+      min-height: 82px;
+      padding: 0 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--planner-border);
+      background: var(--planner-bg);
+    }
+
+    .planner-brand {
+      font-family: "Playfair Display", serif;
+      font-size: 29px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+    }
+
+    .planner-brand span {
+      color: var(--planner-accent-light);
+    }
+
+    .planner-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .planner-nav-links a {
+      color: var(--planner-muted);
+      font-size: 13px;
+      transition: color .25s ease;
+    }
+
+    .planner-nav-links a:hover,
+    .planner-nav-links a.active {
+      color: var(--planner-text);
+    }
+
+    .planner-nav-links a.active {
+      position: relative;
+    }
+
+    .planner-nav-links a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -12px;
+      width: 18px;
+      height: 2px;
+      background: var(--planner-accent-light);
+    }
+
+    /* MAIN LAYOUT */
+
+    .planner-container {
+      width: min(100% - 48px, 1000px);
+      margin: 0 auto;
+      padding: 90px 0 110px;
+    }
+
+    .planner-intro {
+      max-width: 730px;
+      margin-bottom: 65px;
+      animation: plannerEnter .7s ease both;
+    }
+
+    .planner-eyebrow {
+      margin: 0 0 22px;
+      color: var(--planner-accent-light);
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .planner-intro h1 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(45px, 7vw, 76px);
+      line-height: 1.12;
+      font-weight: 500;
+      letter-spacing: -2px;
+    }
+
+    .planner-intro h1 span {
+      color: var(--planner-accent-light);
+      font-style: italic;
+    }
+
+    .planner-description {
+      max-width: 600px;
+      margin: 22px 0 0;
+      color: var(--planner-muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    /* TASK MANAGER PANEL */
+
+    .planner-board {
+      padding: 40px;
+      background: var(--planner-panel);
+      border: 1px solid var(--planner-border);
+      animation: plannerEnter .8s ease .1s both;
+    }
+
+    .planner-section-label {
+      margin: 0 0 17px;
+      color: var(--planner-accent-light);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .planner-board h2 {
+      margin: 0 0 30px;
+      font-family: "Playfair Display", serif;
+      font-size: 37px;
+      font-weight: 500;
+    }
+
+    /* INPUT AREA */
+
+    .task-form {
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .task-input {
+      flex: 1;
+      min-width: 0;
+      height: 60px;
+      padding: 0 20px;
+      border: 1px solid var(--planner-border);
+      border-radius: 0;
+      outline: none;
+      background: var(--planner-card);
+      color: var(--planner-text);
+      font-size: 14px;
+      transition: border-color .25s ease;
+    }
+
+    .task-input::placeholder {
+      color: #887e82;
+    }
+
+    .task-input:focus {
+      border-color: var(--planner-accent-light);
+    }
+
+    .add-task-button {
+      min-width: 145px;
+      min-height: 60px;
+      padding: 0 25px;
+      border: 1px solid var(--planner-accent);
+      border-radius: 0;
+      background: var(--planner-accent);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .25s ease, transform .25s ease;
+    }
+
+    .add-task-button:hover {
+      background: #bd3657;
+      transform: translateY(-2px);
+    }
+
+    /* STATISTICS */
+
+    .task-statistics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 55px;
+    }
+
+    .task-stat {
+      min-height: 130px;
+      padding: 25px 22px;
+      border: 1px solid var(--planner-border);
+      background: var(--planner-card);
+      transition: border-color .25s ease, transform .25s ease;
+    }
+
+    .task-stat:hover {
+      border-color: var(--planner-accent);
+      transform: translateY(-3px);
+    }
+
+    .task-stat strong {
+      display: block;
+      margin-bottom: 15px;
+      color: var(--planner-accent-light);
+      font-family: "Playfair Display", serif;
+      font-size: 35px;
+      font-weight: 500;
+    }
+
+    .task-stat span {
+      color: var(--planner-muted);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* TASK LIST HEADER */
+
+    .task-list-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--planner-border);
+    }
+
+    .task-list-heading h3 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: 29px;
+      font-weight: 500;
+    }
+
+    /* FILTER BUTTONS */
+
+    .task-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-button {
+      min-height: 40px;
+      padding: 0 17px;
+      border: 1px solid var(--planner-border);
+      border-radius: 0;
+      background: transparent;
+      color: var(--planner-muted);
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .filter-button:hover {
+      border-color: var(--planner-accent-light);
+      color: var(--planner-text);
+    }
+
+    .filter-button.active {
+      border-color: var(--planner-accent);
+      background: var(--planner-accent);
+      color: white;
+    }
+
+    /* TASK ROWS */
+
+    .task-list {
+      padding-top: 10px;
+    }
+
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 76px;
+      padding: 16px 12px;
+      border-bottom: 1px solid var(--planner-border);
+      animation: plannerEnter .3s ease both;
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      accent-color: var(--planner-accent);
+      cursor: pointer;
+    }
+
+    .task-name {
+      flex: 1;
+      min-width: 0;
+      color: var(--planner-text);
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .task-row.completed .task-name {
+      color: #82787c;
+      text-decoration: line-through;
+      text-decoration-color: var(--planner-accent-light);
+    }
+
+    .task-status {
+      color: var(--planner-muted);
+      font-family: "DM Mono", monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .task-row.completed .task-status {
+      color: var(--planner-accent-light);
+    }
+
+    .delete-task-button {
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #a99ba0;
+      font-size: 19px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    .delete-task-button:hover {
+      border-color: #7c293e;
+      color: #ed8298;
+    }
+
+    /* EMPTY STATE */
+
+    .empty-state {
+      padding: 55px 15px;
+      text-align: center;
+    }
+
+    .empty-state p {
+      margin: 0;
+      color: var(--planner-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .empty-state strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--planner-text);
+      font-family: "Playfair Display", serif;
+      font-size: 23px;
+      font-weight: 500;
+    }
+
+    /* FOOTER */
+
+    .planner-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 7%;
+      border-top: 1px solid var(--planner-border);
+      color: var(--planner-muted);
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    .planner-footer span:last-child {
+      color: var(--planner-accent-light);
+    }
+
+    /* ANIMATIONS */
+
+    @keyframes plannerEnter {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* MOBILE RESPONSIVENESS */
+
+    @media (max-width: 700px) {
+      .planner-nav {
+        min-height: 72px;
+        padding: 0 22px;
+      }
+
+      .planner-nav-links {
+        gap: 13px;
+      }
+
+      .planner-nav-links a {
+        font-size: 11px;
+      }
+
+      .planner-brand {
+        font-size: 25px;
+      }
+
+      .planner-container {
+        width: min(100% - 32px, 1000px);
+        padding: 65px 0 75px;
+      }
+
+      .planner-intro {
+        margin-bottom: 40px;
+      }
+
+      .planner-intro h1 {
+        font-size: clamp(42px, 10vw, 60px);
+      }
+
+      .planner-board {
+        padding: 25px 18px;
+      }
+
+      .planner-board h2 {
+        font-size: 31px;
+      }
+
+      .task-statistics {
+        gap: 9px;
+      }
+
+      .task-stat {
+        min-height: 105px;
+        padding: 17px 12px;
+      }
+
+      .task-stat strong {
+        font-size: 29px;
+      }
+
+      .task-stat span {
+        font-size: 8px;
+        letter-spacing: .7px;
+      }
+
+      .task-list-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .task-filters {
+        width: 100%;
+      }
+
+      .filter-button {
+        flex: 1;
+        padding: 0 8px;
+      }
+
+      .task-status {
+        display: none;
+      }
+
+      .planner-footer {
+        padding: 24px 20px;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .planner-nav {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+        padding: 15px 20px;
+      }
+
+      .planner-nav-links {
+        width: 100%;
+        justify-content: space-between;
+        gap: 5px;
+      }
+
+      .task-form {
+        flex-direction: column;
+      }
+
+      .add-task-button {
+        width: 100%;
+      }
+
+      .task-statistics {
+        grid-template-columns: 1fr;
+      }
+
+      .task-stat {
+        min-height: 85px;
+      }
+
+      .task-stat strong {
+        margin-bottom: 5px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .planner-page *,
+      .planner-page *::before,
+      .planner-page *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="planner-page">
+
+  <!-- NAVIGATION -->
+  <header class="planner-nav">
+    <a href="index.html" class="planner-brand">F<span>.</span>E.</a>
+
+    <nav class="planner-nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="planner.html" class="active">Planner</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="planner-container">
+
+    <!-- INTRODUCTION -->
+    <section class="planner-intro">
+      <p class="planner-eyebrow">YOUR SPACE. YOUR PRIORITIES.</p>
+
+      <h1>
+        Make room for<br>
+        <span>what matters.</span>
+      </h1>
+
+      <p class="planner-description">
+        Every idea, assignment and responsibility deserves a place.
+        Write it down, work through it, and keep moving forward.
+      </p>
+    </section>
+
+    <!-- TASK MANAGER -->
+    <section class="planner-board">
+
+      <p class="planner-section-label">PERSONAL TASK MANAGER</p>
+
+      <h2>My tasks<span style="color:#e77b91">.</span></h2>
+
+      <!-- ADD TASK -->
+      <form class="task-form" id="taskForm">
+        <input
+          type="text"
+          id="taskInput"
+          class="task-input"
+          placeholder="What do you need to get done?"
+          maxlength="150"
+          autocomplete="off"
+          aria-label="Enter a task"
+          required
+        >
+
+        <button type="submit" class="add-task-button">
+          + Add task
+        </button>
+      </form>
+
+      <!-- TASK STATISTICS -->
+      <section class="task-statistics" aria-label="Task statistics">
+
+        <div class="task-stat">
+          <strong id="allCount">0</strong>
+          <span>All tasks</span>
+        </div>
+
+        <div class="task-stat">
+          <strong id="todoCount">0</strong>
+          <span>To do</span>
+        </div>
+
+        <div class="task-stat">
+          <strong id="completedCount">0</strong>
+          <span>Completed</span>
+        </div>
+
+      </section>
+
+      <!-- TASK LIST -->
+      <section class="task-list-section">
+
+        <div class="task-list-heading">
+          <h3>Your list</h3>
+
+          <div class="task-filters" aria-label="Filter tasks">
+
+            <button
+              type="button"
+              class="filter-button active"
+              data-filter="all"
+              aria-pressed="true"
+            >
+              All tasks
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-filter="todo"
+              aria-pressed="false"
+            >
+              To do
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              data-filter="completed"
+              aria-pressed="false"
+            >
+              Completed
+            </button>
+
+          </div>
+        </div>
+
+        <div
+          id="taskList"
+          class="task-list"
+          aria-live="polite"
+        ></div>
+
+      </section>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="planner-footer">
+    <span>© 2026 Chukwu Favour E.</span>
+    <span>CREATE WITH PURPOSE. SOLVE WITH PRECISION.</span>
+  </footer>
+
+  <script>
+    // ====================================
+    // PERSONAL TASK MANAGER
+    // ====================================
+
+    const taskForm = document.getElementById("taskForm");
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    const allCount = document.getElementById("allCount");
+    const todoCount = document.getElementById("todoCount");
+    const completedCount = document.getElementById("completedCount");
+
+    const filterButtons = document.querySelectorAll(".filter-button");
+
+    // Load previously saved tasks.
+    const STORAGE_KEY = "favourPortfolioPlannerTasks";
+
+    let tasks = [];
+
+    try {
+      const savedTasks = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      tasks = Array.isArray(savedTasks) ? savedTasks : [];
+    } catch (error) {
+      tasks = [];
+    }
+
+    let currentFilter = "all";
+
+    // Save tasks in the browser.
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    // Update the three statistics.
+    function updateStatistics() {
+      const completed = tasks.filter(task => task.completed).length;
+      const todo = tasks.length - completed;
+
+      allCount.textContent = tasks.length;
+      todoCount.textContent = todo;
+      completedCount.textContent = completed;
+    }
+
+    // Display the correct tasks.
+    function renderTasks() {
+      taskList.innerHTML = "";
+
+      updateStatistics();
+
+      const visibleTasks = tasks.filter(task => {
+        if (currentFilter === "todo") {
+          return !task.completed;
+        }
+
+        if (currentFilter === "completed") {
+          return task.completed;
+        }
+
+        return true;
+      });
+
+      // Show a message when the selected list is empty.
+      if (visibleTasks.length === 0) {
+        const emptyState = document.createElement("div");
+        emptyState.className = "empty-state";
+
+        const heading = document.createElement("strong");
+        const message = document.createElement("p");
+
+        if (currentFilter === "all") {
+          heading.textContent = "Your list is clear.";
+          message.textContent = "Add your first task above and start making progress.";
+        } else if (currentFilter === "todo") {
+          heading.textContent = "Nothing pending.";
+          message.textContent = "You have no outstanding tasks in this list.";
+        } else {
+          heading.textContent = "Nothing completed yet.";
+          message.textContent = "Completed tasks will appear here when you tick them off.";
+        }
+
+        emptyState.appendChild(heading);
+        emptyState.appendChild(message);
+        taskList.appendChild(emptyState);
+
+        return;
+      }
+
+      visibleTasks.forEach(task => {
+        const row = document.createElement("div");
+        row.className = "task-row";
+
+        if (task.completed) {
+          row.classList.add("completed");
+        }
+
+        // Checkbox.
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "task-checkbox";
+        checkbox.checked = task.completed;
+        checkbox.setAttribute("aria-label", "Mark task as completed");
+
+        checkbox.addEventListener("change", () => {
+          toggleTask(task.id);
+        });
+
+        // Task name.
+        const name = document.createElement("span");
+        name.className = "task-name";
+        name.textContent = task.name;
+
+        // Task status.
+        const status = document.createElement("span");
+        status.className = "task-status";
+        status.textContent = task.completed ? "Completed" : "To do";
+
+        // Delete button.
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-task-button";
+        deleteButton.textContent = "×";
+        deleteButton.setAttribute("aria-label", "Delete " + task.name);
+
+        deleteButton.addEventListener("click", () => {
+          deleteTask(task.id);
+        });
+
+        row.appendChild(checkbox);
+        row.appendChild(name);
+        row.appendChild(status);
+        row.appendChild(deleteButton);
+
+        taskList.appendChild(row);
+      });
+    }
+
+    // Add a new task.
+    taskForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const taskName = taskInput.value.trim();
+
+      if (taskName === "") {
+        taskInput.focus();
+        return;
+      }
+
+      const newTask = {
+        id: (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : Date.now().toString() + Math.random().toString(16).slice(2),
+        name: taskName,
+        completed: false
+      };
+
+      tasks.push(newTask);
+
+      saveTasks();
+
+      // Return to All Tasks so the newly added task is visible.
+      currentFilter = "all";
+      updateFilterButtons();
+
+      renderTasks();
+
+      taskInput.value = "";
+      taskInput.focus();
+    });
+
+    // Mark a task as completed or return it to To Do.
+    function toggleTask(taskId) {
+      tasks = tasks.map(task => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            completed: !task.completed
+          };
+        }
+
+        return task;
+      });
+
+      saveTasks();
+      renderTasks();
+    }
+
+    // Delete a task.
+    function deleteTask(taskId) {
+      tasks = tasks.filter(task => task.id !== taskId);
+
+      saveTasks();
+      renderTasks();
+    }
+
+    // Update the appearance of the filter buttons.
+    function updateFilterButtons() {
+      filterButtons.forEach(button => {
+        const isActive = button.dataset.filter === currentFilter;
+
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+    }
+
+    // Switch between All Tasks, To Do and Completed.
+    filterButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+
+        updateFilterButtons();
+        renderTasks();
+      });
+    });
+
+    // Display saved tasks when the page opens.
+    renderTasks();
+
+  </script>
+
+</body>
+</html>

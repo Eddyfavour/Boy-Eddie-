@@ -1,0 +1,583 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+/* =========================================
+   GLOBAL INTRO STYLING
+========================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #0d0b0c;
+  color: #f4efed;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* =========================================
+   CINEMATIC INTRO
+========================================= */
+
+.cinematic-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #0d0b0c;
+  color: #f4efed;
+  isolation: isolate;
+  opacity: 1;
+  visibility: visible;
+}
+
+.cinematic-intro::before,
+.cinematic-intro::after {
+  content: "";
+  position: absolute;
+  left: -15%;
+  width: 130%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ffffff30,
+    transparent
+  );
+  opacity: 0;
+  animation: intro-line-drift 5.5s ease-in-out infinite;
+}
+
+.cinematic-intro::before {
+  top: 28%;
+  animation-delay: .3s;
+}
+
+.cinematic-intro::after {
+  top: 72%;
+  animation-delay: 1.2s;
+}
+
+@keyframes intro-line-drift {
+  0% {
+    transform: translateX(-3%);
+    opacity: 0;
+  }
+
+  35% {
+    opacity: .42;
+  }
+
+  75% {
+    opacity: .22;
+  }
+
+  100% {
+    transform: translateX(3%);
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   LOCATION — TOP RIGHT
+========================================= */
+
+.intro-location {
+  position: absolute;
+  z-index: 4;
+  top: clamp(24px, 5vh, 52px);
+  right: clamp(24px, 6vw, 84px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+  opacity: 0;
+  animation: intro-detail-in 1.2s ease .45s forwards;
+}
+
+.intro-location span {
+  font: 500 9px 'DM Mono', monospace;
+  letter-spacing: 2.4px;
+  color: #d47b8d;
+}
+
+.intro-location strong {
+  font: 600 10px 'DM Sans', sans-serif;
+  letter-spacing: 1.15px;
+  color: #f4efed;
+}
+
+.intro-location small {
+  font: 10px 'DM Mono', monospace;
+  letter-spacing: 1.5px;
+  color: #aaa0a2;
+}
+
+@keyframes intro-detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(-7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   FOUR ORIGINAL TRAVELLING LINES
+========================================= */
+
+.intro-left-mark {
+  position: absolute;
+  z-index: 4;
+  left: clamp(26px, 6vw, 86px);
+  top: 0;
+  bottom: 0;
+  width: clamp(74px, 10vw, 132px);
+  height: 100vh;
+  display: block;
+  opacity: .86;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.intro-left-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #d47b8d 14%,
+    #f4efed 48%,
+    #8f263e 84%,
+    transparent 100%
+  );
+  transform: translateY(-110%);
+  opacity: 0;
+  transform-origin: center;
+  filter: drop-shadow(0 0 5px #d47b8d55);
+}
+
+.intro-left-line.line-one {
+  left: 5%;
+  animation: line-travel-down 3.8s cubic-bezier(.48,.02,.32,1) .15s infinite;
+}
+
+.intro-left-line.line-two {
+  left: 34%;
+  animation: line-travel-up 4.2s cubic-bezier(.48,.02,.32,1) 1.05s infinite;
+}
+
+.intro-left-line.line-three {
+  left: 63%;
+  animation: line-travel-down 4s cubic-bezier(.48,.02,.32,1) 2.05s infinite;
+}
+
+.intro-left-line.line-four {
+  left: 92%;
+  animation: line-travel-up 4.4s cubic-bezier(.48,.02,.32,1) 3.05s infinite;
+}
+
+@keyframes line-travel-down {
+  0% {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: .78;
+  }
+
+  82% {
+    opacity: .58;
+  }
+
+  100% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+
+@keyframes line-travel-up {
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: .78;
+  }
+
+  82% {
+    opacity: .58;
+  }
+
+  100% {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   CENTRAL HELLO AND NAME
+========================================= */
+
+.intro-center {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6%;
+  text-align: center;
+}
+
+.intro-hello {
+  position: relative;
+  z-index: 2;
+  font: 500 clamp(58px, 10vw, 132px)/1.05 'Playfair Display', Georgia, serif;
+  letter-spacing: -.055em;
+  color: #f4efed;
+  min-height: 1.1em;
+  text-shadow: 0 10px 45px #8f263e30;
+  transform: translateY(0) scale(1);
+  transform-origin: center;
+  transition:
+    transform 1.65s cubic-bezier(.2,.72,.2,1),
+    opacity 1.1s ease;
+}
+
+.intro-name {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0 5%;
+  font: 800 clamp(25px, 5.2vw, 68px)/1.15 'Cinzel', Georgia, serif;
+  letter-spacing: .075em;
+  color: #f4efed;
+  text-shadow: 0 0 1px #fff, 0 8px 38px #8f263e58;
+  opacity: 0;
+  transform: translateY(55vh) scale(1.24);
+  transition:
+    transform 2.15s cubic-bezier(.18,.72,.22,1),
+    opacity 1.6s ease;
+}
+
+/* =========================================
+   MANIFESTO
+========================================= */
+
+.intro-manifesto {
+  position: absolute;
+  z-index: 3;
+  left: 24px;
+  right: 24px;
+  bottom: clamp(32px, 7vh, 70px);
+  text-align: center;
+  font: 500 clamp(11px, 1.25vw, 14px)/1.6 'DM Sans', sans-serif;
+  letter-spacing: .08em;
+  color: #d8c9cc;
+  white-space: normal;
+  min-height: 1.6em;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 1.3s ease,
+    transform 1.3s ease;
+}
+
+.intro-manifesto::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin-left: 4px;
+  vertical-align: -.12em;
+  background: #d47b8d;
+  animation: intro-caret .9s steps(2,end) infinite;
+}
+
+@keyframes intro-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   INTRO ANIMATION STATES
+========================================= */
+
+.cinematic-intro.hello-zoomed .intro-hello {
+  transform: translateY(0) scale(1.34);
+}
+
+.cinematic-intro.hello-raised .intro-hello {
+  transform: translateY(-58vh) scale(1.05);
+  opacity: 0;
+}
+
+.cinematic-intro.name-revealed .intro-name {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.cinematic-intro.name-raised .intro-name {
+  transform: translateY(-105%) scale(.82);
+}
+
+.cinematic-intro.manifesto-visible .intro-manifesto {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================
+   3D CUBE TRANSITION
+========================================= */
+
+.intro-curtain {
+  position: absolute;
+  z-index: 10000;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 1;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+}
+
+/* Every individual cube */
+
+.intro-cube {
+  position: absolute;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  animation: cube-breakaway var(--cube-duration, 1.1s)
+    cubic-bezier(.55,.05,.25,1)
+    var(--cube-delay, 0s) forwards;
+}
+
+/* Cube faces */
+
+.intro-cube-face {
+  position: absolute;
+  display: block;
+  backface-visibility: hidden;
+}
+
+.intro-cube-front {
+  background: var(--cube-front, #17080e);
+  transform: translateZ(var(--cube-depth-half, 7px));
+  border: 1px solid rgba(255,255,255,.045);
+}
+
+.intro-cube-back {
+  background: #080607;
+  transform: rotateY(180deg) translateZ(var(--cube-depth-half, 7px));
+}
+
+.intro-cube-right {
+  background: #4b142b;
+  transform: rotateY(90deg) translateZ(var(--cube-depth-half, 7px));
+  transform-origin: center;
+}
+
+.intro-cube-left {
+  background: #10070b;
+  transform: rotateY(-90deg) translateZ(var(--cube-depth-half, 7px));
+  transform-origin: center;
+}
+
+.intro-cube-top {
+  background: #70213c;
+  transform: rotateX(90deg) translateZ(var(--cube-depth-half, 7px));
+  transform-origin: center;
+}
+
+.intro-cube-bottom {
+  background: #160910;
+  transform: rotateX(-90deg) translateZ(var(--cube-depth-half, 7px));
+  transform-origin: center;
+}
+
+/* Dark background behind the departing cubes */
+
+.cinematic-intro.is-exiting {
+  background: #050505;
+  pointer-events: none;
+}
+
+.cinematic-intro.is-exiting .intro-location,
+.cinematic-intro.is-exiting .intro-left-mark,
+.cinematic-intro.is-exiting .intro-center,
+.cinematic-intro.is-exiting .intro-manifesto {
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.cinematic-intro.is-exiting .intro-curtain {
+  visibility: visible;
+}
+
+/* Individual cube movement */
+
+@keyframes cube-breakaway {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate3d(0, 0, 0, 0);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate3d(var(--cube-x), var(--cube-y), var(--cube-z))
+      rotate3d(
+        var(--cube-rx),
+        var(--cube-ry),
+        var(--cube-rz),
+        var(--cube-rotation)
+      );
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .intro-location {
+    top: 22px;
+    right: 22px;
+  }
+
+  .intro-location strong {
+    font-size: 8px;
+    letter-spacing: .8px;
+  }
+
+  .intro-location small {
+    font-size: 9px;
+  }
+
+  .intro-name {
+    letter-spacing: .035em;
+    padding: 0 3%;
+  }
+
+  .intro-manifesto {
+    left: 20px;
+    right: 20px;
+    bottom: 35px;
+    letter-spacing: .035em;
+  }
+
+  .cinematic-intro.hello-raised .intro-hello {
+    transform: translateY(-52vh) scale(1.02);
+  }
+
+  .cinematic-intro.name-raised .intro-name {
+    transform: translateY(-92%) scale(.78);
+  }
+
+  .intro-left-mark {
+    left: 15px;
+    width: 54px;
+  }
+
+  .intro-left-line {
+    opacity: .65;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-intro::before,
+  .cinematic-intro::after,
+  .intro-manifesto::after {
+    animation: none;
+  }
+
+  .intro-left-line {
+    animation: none;
+    opacity: .45;
+    transform: none;
+  }
+
+  .intro-location {
+    opacity: 1;
+    transform: none;
+  }
+
+  .intro-hello,
+  .intro-name,
+  .intro-manifesto {
+    transition: none !important;
+  }
+
+  .intro-name {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+
+  .intro-manifesto {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* RESTORE HOMEPAGE AFTER INTRO */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.cinematic-intro {
+  pointer-events: auto;
+}
+
+.cinematic-intro.is-exiting {
+  pointer-events: none;
+}
+/* Hide location details as soon as the cube exit begins */
+.cinematic-intro.is-exiting .intro-location {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+/* Location disappears when cube transition begins */
+.cinematic-intro.is-exiting .intro-location {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
